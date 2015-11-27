@@ -1,5 +1,27 @@
 apply plugin: 'com.android.application'
+apply plugin: 'maven-publish'
 apply plugin: 'git-repo'
+
+repositories {
+    github("igor13127", "test_grade", "master", "releases")
+    git("https://github.com/igor13127/test_grade.git", "com.test.gradle", "master", "releases")
+}
+
+gitPublishConfig{
+    org = "igor13127"
+    repo = "test_grade"
+}
+
+publishing {
+    publications {
+        //...
+    }
+    repositories {
+        maven {
+            url "file://${gitPublishConfig.home}/${gitPublishConfig.org}/${gitPublishConfig.repo}/releases"
+        }
+    }
+}
 
 android {
     compileSdkVersion 23
@@ -20,10 +42,16 @@ android {
     }
 }
 
-repositories {
-    github("layerhq", "maven-private", "master", "releases")
-    git("https://some/clone/url.git", "arbitrary.unique.name", "master", "releases")
-}
+/*publishing {
+    publications {
+
+    }
+    repositories {
+        maven {
+            url "file://${gitPublishConfig.home}/${gitPublishConfig.org}/${gitPublishConfig.repo}/releases"
+        }
+    }
+}*/
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
